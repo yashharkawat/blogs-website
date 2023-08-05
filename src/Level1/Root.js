@@ -10,8 +10,9 @@ const Root=()=>{
         else localStorage.setItem('savedPostId',JSON.stringify([]));
         
         try{
-            if('current_user' in localStorage){
-                //console.log(true);
+            if('demo_user' in localStorage){
+
+                console.log(true);
             }
             else{
                 navigate('/signup');

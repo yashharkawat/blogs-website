@@ -27,6 +27,8 @@ const SignUp = () => {
           users.push(values);
           //console.log(users);
           localStorage.setItem('users',JSON.stringify(users));
+          localStorage.setItem('demo_user',true);
+          navigate('/');
             // const url='http://localhost:3000/users';
             // const postData={password_digest:values.password,email:`${values.username}@gmail.com`, username:values.username};
       
@@ -44,14 +46,14 @@ const SignUp = () => {
              // localStorage.setItem('currentUserId',posts.id);
            // } 
       
-            try{
-              //postRequest();    
-              //console.log(data);
-            }
-            catch (err){
-              console.log(err);
-            }
-          navigate('/');
+            // try{
+            //   //postRequest();    
+            //   //console.log(data);
+            // }
+            // catch (err){
+            //   console.log(err);
+            // }
+          
         }}
       >
         {({ values, handleBlur, handleChange, handleSubmit, errors, touched }) => (

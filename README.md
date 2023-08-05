@@ -1,5 +1,6 @@
 Hi prabjyot,
 One thing I forgot to add in the video is, I also added a comments page ,when we go in a post and click on comments ,the comments page will open , the values there are dummy but it is working .
+And ankit is working on the database part, so i have not uploaded it
 
 
 

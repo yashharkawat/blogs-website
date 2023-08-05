@@ -10,25 +10,31 @@ const Edit = () => {
     useEffect(()=>{
         //console.log(params.id);
         setLoading(true);
-        try{
-            const url=`http://localhost:3000/articles/${params.id}`;
-            const getRequest=async ()=>{
-              const options = {
-                method: 'GET',
-                headers: new Headers({'content-type': 'application/json'
-                })};
-              const data=await fetch(url,options);
-              const getPosts=await data.json();
+
+        const posts=JSON.parse(localStorage.getItem('posts'));
+        const editpost=posts.filter(item=>item.id==params.id);
+        setPost(editpost[0]);
+        
+        //api
+
+        // try{
+        //     const url=`http://localhost:3000/articles/${params.id}`;
+        //     const getRequest=async ()=>{
+        //       const options = {
+        //         method: 'GET',
+        //         headers: new Headers({'content-type': 'application/json'
+        //         })};
+        //       const data=await fetch(url,options);
+        //       const getPosts=await data.json();
               
-              setPost(getPosts);
-              console.log(post);
-              console.log(getPosts);
-            }  
-            getRequest();
-        }
-        catch(err){
-            console.log(err);
-        }
+        //       setPost(getPosts);
+              
+        //     }  
+        //     getRequest();
+        // }
+        // catch(err){
+        //     console.log(err);
+        // }
         setLoading(false);
    },[params.id])
 

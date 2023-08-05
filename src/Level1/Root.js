@@ -6,9 +6,12 @@ const Root=()=>{
     useEffect(()=>{
         if('users' in localStorage){}
         else localStorage.setItem('users',JSON.stringify([]));
+        if('savedPostId' in localStorage){}
+        else localStorage.setItem('savedPostId',JSON.stringify([]));
+        
         try{
             if('current_user' in localStorage){
-                console.log(true);
+                //console.log(true);
             }
             else{
                 navigate('/signup');

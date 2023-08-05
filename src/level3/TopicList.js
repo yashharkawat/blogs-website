@@ -9,42 +9,64 @@ const TopicListPage = () => {
 
   const handleTopicClick = (topic) => {
     setSelectedTopic(topic);
+    console.log(topic);
   };
 
   useEffect(()=>{
     setLoading(true);
-    try{
-        const url='http://localhost:3000/articles';
-        const getRequest=async ()=>{
-          const options = {
-            method: 'GET',
-            headers: new Headers({'content-type': 'application/json'
-            })};
-          const data=await fetch(url,options);
-          let getPosts=await data.json();
-          getPosts=getPosts.map(post=>{return {...post,'topic':'science'}})
-
-          const topicPosts=getPosts.filter((post)=>{
-            if(selectedTopic==='others') return true;
-            return post.topic===selectedTopic;
-          });
-          const diffTopics=getPosts.map((post)=>{
-            if(post.topic===undefined) return 'others';
-            return post.topic;
-          })
-            const uniqueTopics = Array.from(new Set(diffTopics));
-            console.log(uniqueTopics);
-          setTopics(uniqueTopics);
-          setPosts(topicPosts);
-          //console.log(posts);
-        }  
-        getRequest();
-    }
-    catch (err){
-        console.log(err);
-    }
+    const getPosts=JSON.parse(localStorage.getItem('posts'));
+    
+    const topicPosts=getPosts.filter((post)=>{
+    if(selectedTopic==='others') return true;
+      return post.topic===selectedTopic;
+    });
+    setPosts(topicPosts);
+    const diffTopics=getPosts.map((post)=>{
+      if(post.topic===undefined) return 'others';
+      return post.topic;
+    })
+      const uniqueTopics = Array.from(new Set(diffTopics));
+      console.log(uniqueTopics);
+    setTopics(uniqueTopics);
+    setPosts(topicPosts);
     setLoading(false);
   },[selectedTopic])
+
+  //using api
+  // useEffect(()=>{
+  //   setLoading(true);
+  //   try{
+  //       const url='http://localhost:3000/articles';
+  //       const getRequest=async ()=>{
+  //         const options = {
+  //           method: 'GET',
+  //           headers: new Headers({'content-type': 'application/json'
+  //           })};
+  //         const data=await fetch(url,options);
+  //         let getPosts=await data.json();
+  //         getPosts=getPosts.map(post=>{return {...post,'topic':'science'}})
+
+  //         const topicPosts=getPosts.filter((post)=>{
+  //           if(selectedTopic==='others') return true;
+  //           return post.topic===selectedTopic;
+  //         });
+  //         const diffTopics=getPosts.map((post)=>{
+  //           if(post.topic===undefined) return 'others';
+  //           return post.topic;
+  //         })
+  //           const uniqueTopics = Array.from(new Set(diffTopics));
+  //           console.log(uniqueTopics);
+  //         setTopics(uniqueTopics);
+  //         setPosts(topicPosts);
+  //         //console.log(posts);
+  //       }  
+  //       getRequest();
+  //   }
+  //   catch (err){
+  //       console.log(err);
+  //   }
+  //   setLoading(false);
+  // },[selectedTopic])
   const deletePostHandler=(postId)=>{
     
 }

@@ -10,7 +10,7 @@ const NewPost = (props) => {
       title: props.initialValues.title,
       topic: props.initialValues.topic,
       image: props.initialValues.image,
-      description: props.initialValues.description,
+      text: props.initialValues.text,
       author: props.initialValues.author,
     });
     
@@ -20,34 +20,59 @@ const NewPost = (props) => {
     title: yup.string().required('Title is required'),
     topic: yup.string(),
     image: yup.string(),
-    description: yup.string().required('description is required'),
+    text: yup.string().required('text is required'),
     author: yup.string().required('Author is required'),
   });
-  const postRequest=async(method,postData)=>{
-    const options = {
-        method: method,
+
+  //api
+
+  // const postRequest=async(method,postData)=>{
+  //   const options = {
+  //       method: method,
   
-        headers: new Headers({'content-type': 'application/json'
-        }),
-        body: JSON.stringify(postData)
-        };
-        const url='http://localhost:3000/articles'
-        const data=await fetch(url,options);
-        const posts=await data.json();
-        return posts;
-  }
+  //       headers: new Headers({'content-type': 'application/json'
+  //       }),
+  //       body: JSON.stringify(postData)
+  //       };
+  //       const url='http://localhost:3000/articles'
+  //       const data=await fetch(url,options);
+  //       const posts=await data.json();
+  //       return posts;
+  // }
   
   return (
     <div className='container'>
         <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={(values,{resetForm})=>{
-            if(props.id===undefined||props.id===null){
-              //console.log(props.id);
-              postRequest('POST',values);
+            
+            //api
+            // if(props.id===undefined||props.id===null){
+            //   //console.log(props.id);
+            //   postRequest('POST',values);
+            // }
+            // else{
+            //   postRequest('PUT',{...values,id:props.id});
+            // }
+            //change this to values
+            if(props.id===undefined){
+              const posts=JSON.parse(localStorage.getItem('posts'));
+              posts.push(values);
+              //console.log(posts);
+              localStorage.setItem('posts',JSON.stringify(posts));
             }
             else{
-              postRequest('PUT',{...values,id:props.id});
+              const posts=JSON.parse(localStorage.getItem('posts'));
+              const newPosts=posts.map((post)=>{
+                if(post.id==props.id)
+                {
+                  //console.log(post.id);
+                  return {...post,...values};
+                }
+                return post;
+              })
+              
+            //console.log(posts);
+              localStorage.setItem('posts',JSON.stringify(newPosts));
             }
-            //change this to values
             
         }}>
       {({values,handleBlur,handleChange,handleSubmit,errors,touched})=>(
@@ -65,8 +90,8 @@ const NewPost = (props) => {
           <ErrorMessage name="image" component="div" className="newpost-error" />
         </div>
         <div>
-          <input type="" name="description" placeholder="Text" value={values.description} onChange={handleChange} onBlur={handleBlur} className="newpost-input"/>
-          <ErrorMessage name="description" component="div" className="newpost-error"/>
+          <input type="text" name="text" placeholder="Text" value={values.text} onChange={handleChange} onBlur={handleBlur} className="newpost-input"/>
+          <ErrorMessage name="text" component="div" className="newpost-error"/>
         </div>
         <div>
           <input type="text" name="author" placeholder="Author" value={values.author} onChange={handleChange} onBlur={handleBlur} className="newpost-input"/>

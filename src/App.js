@@ -20,6 +20,7 @@ import Root from './Level1/Root';
 import TopicListPage from './level3/TopicList';
 import PayToViewContent from './level4/PayToViewContent';
 import AuthorProfilePage from './level2/AuthorProfilePage';
+import SavedPosts from './level5/SavedPosts';
 const router=createBrowserRouter([
 {
   path:'/',
@@ -66,6 +67,10 @@ const router=createBrowserRouter([
     {
       path:'authors/:name',
       element:<AuthorProfilePage />
+    },
+    {
+      path:'saved-posts',
+      element:<SavedPosts />
     }
   ]
 },

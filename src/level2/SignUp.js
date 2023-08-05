@@ -25,8 +25,32 @@ const SignUp = () => {
           localStorage.setItem('current_user',JSON.stringify(values));
           const users=JSON.parse(localStorage.getItem('users'));
           users.push(values);
-          console.log(users);
+          //console.log(users);
           localStorage.setItem('users',JSON.stringify(users));
+            // const url='http://localhost:3000/users';
+            // const postData={password_digest:values.password,email:`${values.username}@gmail.com`, username:values.username};
+      
+            // const postRequest=async ()=>{
+            //   const options = {
+            //         method: 'POST',
+      
+            //         headers: new Headers({'content-type': 'application/json'
+            //         }),
+            //         body: JSON.stringify(postData)
+            //   };
+            //   const data=await fetch(url,options);
+            //   const posts=await data.json();
+              //console.log(posts);
+             // localStorage.setItem('currentUserId',posts.id);
+           // } 
+      
+            try{
+              //postRequest();    
+              //console.log(data);
+            }
+            catch (err){
+              console.log(err);
+            }
           navigate('/');
         }}
       >

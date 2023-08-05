@@ -12,7 +12,9 @@
     align-items: center;
 
   }
-  
+  .text-post{
+    min-width:50%;
+  }
   .post-title {
     font-size: 24px;
     font-weight: bold;

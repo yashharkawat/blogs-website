@@ -1,0 +1,28 @@
+.button-style {
+    margin-right: 10px;
+  }
+
+.button-sheet {
+    margin-bottom: 10px;
+}
+
+.page-heading {
+    background-color: #1976d2;
+    font-weight: 100;
+    color: white;
+    margin-top: -10px;
+    margin-left: -10px;
+    margin-bottom: 10px;
+    height: 70px;
+}
+
+.container {
+    display: flex;
+    align-items: center; 
+}
+
+.text {
+    margin-right: auto; 
+    margin-left: auto;
+    /* Push text to the left start */
+  }

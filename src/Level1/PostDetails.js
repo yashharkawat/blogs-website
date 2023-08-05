@@ -20,23 +20,36 @@ const PostDetails = () => {
 
   useEffect(()=>{
     setLoading(true);
+    
     try{
-      const url=`http://localhost:3000/articles/${params.id}`;
-      const getRequest=async ()=>{
-        const options = {
-          method: 'GET',
-          headers: new Headers({'content-type': 'application/json'
-          })};
-        const data=await fetch(url,options);
-        const getPosts=await data.json();
-        setPost(getPosts);
-        //console.log(posts);
-      }  
-      getRequest();
-    }
-    catch (err){
-        console.log(err);
-    }
+      const newPosts=JSON.parse(localStorage.getItem('posts')); 
+      setPost(...newPosts.filter(post=>post.id==params.id));
+       // console.log(post);
+      setReadTime(readingTime(post.text));
+      }
+      catch (err){
+          console.log(err);
+      }
+
+    //api integration
+
+    // try{
+    //   const url=`http://localhost:3000/articles/${params.id}`;
+    //   const getRequest=async ()=>{
+    //     const options = {
+    //       method: 'GET',
+    //       headers: new Headers({'content-type': 'application/json'
+    //       })};
+    //     const data=await fetch(url,options);
+    //     const getPosts=await data.json();
+    //     setPost(getPosts);
+    //     //console.log(posts);
+    //   }  
+    //   getRequest();
+    // }
+    // catch (err){
+    //     console.log(err);
+    // }
     setLoading(false);
 },[params.id])
 
@@ -56,7 +69,7 @@ const PostDetails = () => {
       </div>
       <div className="flex">
         <div className="flex-item"> {`  ${readTime}`} min read</div>
-        <p className="flex-item">Date: {getDateString(post.datetime)}</p>
+        <p className="flex-item">Date: {getDateString(post.created_at)}</p>
       </div>
       
       <div >

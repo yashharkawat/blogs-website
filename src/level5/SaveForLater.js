@@ -1,12 +1,18 @@
-
+import { useState } from "react";
 const SaveForLater=()=>{
     const saveHandler=(e)=>{
-        console.log(e.target.parentNode.parentNode.id);
+        const postId=e.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.id;
+        const savedPostId=JSON.parse(localStorage.getItem('savedPostId'));
+        savedPostId.push(postId);
+        localStorage.setItem('savedPostId',JSON.stringify(savedPostId));
         //save post here
     }
+    const [save,setSave]=useState(false);
     return (
         <div className='flex-item pointer' onClick={saveHandler} >
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="jy"><path d="M17.5 1.25a.5.5 0 0 1 1 0v2.5H21a.5.5 0 0 1 0 1h-2.5v2.5a.5.5 0 0 1-1 0v-2.5H15a.5.5 0 0 1 0-1h2.5v-2.5zm-11 4.5a1 1 0 0 1 1-1H11a.5.5 0 0 0 0-1H7.5a2 2 0 0 0-2 2v14a.5.5 0 0 0 .8.4l5.7-4.4 5.7 4.4a.5.5 0 0 0 .8-.4v-8.5a.5.5 0 0 0-1 0v7.48l-5.2-4a.5.5 0 0 0-.6 0l-5.2 4V5.75z" fill="#000"></path></svg>
+        {!save&&<div><svg onClick={()=>setSave(true)} aria-label="Save"  color="rgb(0, 0, 0)" fill="rgb(0, 0, 0)" height="24" role="img" viewBox="0 0 24 24" width="24"><title>Save</title><polygon fill="none" points="20 21 12 13.44 4 21 4 3 20 3 20 21" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></polygon></svg></div>}
+        
+        {save&& <svg onClick={()=>setSave(false)} aria-label="Remove"  color="rgb(0, 0, 0)" fill="rgb(0, 0, 0)" height="24" role="img" viewBox="0 0 24 24" width="24"><title>Remove</title><path d="M20 22a.999.999 0 0 1-.687-.273L12 14.815l-7.313 6.912A1 1 0 0 1 3 21V3a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1Z"></path></svg>}
         </div>
     );
 }

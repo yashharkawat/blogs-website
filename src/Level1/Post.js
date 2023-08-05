@@ -17,21 +17,22 @@ export const getDateString=(date)=>{
 }
 const Post = ({ post ,deletePost}) => {
   const [like,setLike]=useState(false);
-  const readTime=readingTime(post.description);
+  const readTime=readingTime(post.text);
   const navigate=useNavigate();
   const postOnClick=()=>{
     navigate(`/post-details/${post.id}`);
   }
   return (
     <div  className='post' id={post.id}>
-      <div>
+      <div className='text-post'>
+  
       <div className='author-date' >
         <Link to={`/authors/${post.author}`}><p className="post-author" >Author: {post.author}</p></Link>
-        <p className="post-datetime">Published on: {getDateString(post.datetime)}</p>
+        <p className="post-datetime">Published on: {getDateString(post.created_at)}</p>
       </div>
       <div className='title-text' onClick={postOnClick}>
         <h2 className="post-title">{post.title}</h2>
-        <p className="post-text">{post.description}</p>
+        <p className="post-text">{post.text}</p>
       </div>
       <div className='navbar-container' >
         <div className='topic-time'>
@@ -61,7 +62,7 @@ const Post = ({ post ,deletePost}) => {
         
       </div>
       <div className='flex-item'>
-          Viewed by {post.views===undefined?0:post.views} people
+          Viewed by {post.view===undefined?0:post.view} people
           
           </div>
       </div>

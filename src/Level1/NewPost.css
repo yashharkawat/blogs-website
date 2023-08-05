@@ -1,0 +1,55 @@
+
+.newpost-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .newpost-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .newpost-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 300px; /* Set a default width for the form */
+  }
+  
+  .newpost-input {
+    padding: 8px;
+    margin: 5px;
+    max-width: 300px; /* Limit the input width to 300px */
+  }
+  
+  .newpost-error {
+    color: red;
+    font-size: 12px;
+    margin-bottom: 5px;
+    text-align: center;
+  }
+  
+  .newpost-button {
+    padding: 10px 15px;
+    margin: 10px;
+    background: blue;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  .newpost-link {
+    text-decoration: none;
+  }
+  
+  /* Responsive styles */
+  @media screen and (max-width: 768px) {
+    .newpost-form {
+      width: 80%;
+      max-width: 400px;
+    }
+  }
+  

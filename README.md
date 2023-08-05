@@ -1,3 +1,9 @@
+Hi prabjyot,
+One thing I forgot to add in the video is, I also added a comments page ,when we go in a post and click on comments ,the comments page will open , the values there are dummy but it is working .
+
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

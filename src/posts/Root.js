@@ -5,15 +5,16 @@ import { auth, db } from "../config/firebase";
 import { getDoc, doc } from "firebase/firestore";
 import firebase from "firebase/app";
 import "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 const Root = () => {
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (auth.currentUser) {
+  const [user, setUser] = useState(null);
+  onAuthStateChanged(auth, (currentUser) => {
+    if (currentUser) {
     } else {
       navigate("/login");
     }
-  }, []);
+  });
 
   return <Outlet />;
 };

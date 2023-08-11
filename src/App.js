@@ -1,26 +1,21 @@
-import './App.css';
-import PostList from './Level1/PostList';
-
 import {
   createBrowserRouter,RouterProvider
 } from "react-router-dom";
 import React from 'react';
-import './App.css'
-import NewPost from './Level1/NewPost';
-import Edit from './Level1/Edit';
-import Display from './Level1/Display';
-import SignUp from './level2/SignUp';
-import Login from './level2/Login';
-import ProfilePage from './level2/ProfilePage';
-import EditProfile from './level2/EditProfile';
-import AuthorList from './level2/AuthorsList';
-import PostDetails from './Level1/PostDetails';
-import BestPosts from './level3/BestPosts';
-import Root from './Level1/Root';
-import TopicListPage from './level3/TopicList';
-import PayToViewContent from './level4/PayToViewContent';
-import AuthorProfilePage from './level2/AuthorProfilePage';
-import SavedPosts from './level5/SavedPosts';
+import NewPost from './posts/createEditPost/NewPost'
+import Edit from './posts/createEditPost/Edit'
+import Display from './posts/display/Display';
+import SignUp from './users/login/SignUp';
+import Login from './users/login/Login';
+import ProfilePage from './users/profile/ProfilePage';
+import EditProfile from './users/profile/EditProfile';
+import PostDetails from './posts/post/PostDetails';
+import BestPosts from './posts/recommendations/BestPosts';
+import Root from './posts/Root';
+import TopicListPage from './posts/Topics/TopicList';
+import PayToViewContent from './Pay/PayToViewContent';
+import AuthorProfilePage from './users/profile/AuthorProfilePage';
+import SavedPosts from './posts/saved/SavedPosts';
 const router=createBrowserRouter([
 {
   path:'/',
@@ -37,10 +32,7 @@ const router=createBrowserRouter([
       path:'editProfile',
       element:<EditProfile />
     },
-    {
-      path:'authors',
-      element:<AuthorList />
-    },
+    
     {
       path:'post-details/:id',
       element:<PostDetails />

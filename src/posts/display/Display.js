@@ -6,6 +6,8 @@ import Button from "@mui/material/Button";
 import { useSelector } from "react-redux";
 
 const Display = () => {
+  // const user=useSelector(state=>state);
+  // console.log("user",user);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState({
     author: "",
@@ -36,12 +38,22 @@ const Display = () => {
         </span>
         <span className="button-style">
           <Button variant="contained" href="/pay">
-            Pay
+            Buy Posts
           </Button>
         </span>
         <span className="button-style">
           <Button variant="contained" href="/saved-posts">
             Saved Posts
+          </Button>
+        </span>
+        <span className="button-style">
+          <Button variant="contained" href="/my-posts">
+            My Posts
+          </Button>
+        </span>
+        <span className="button-style">
+          <Button variant="contained" href="/revision-history">
+            Revision History
           </Button>
         </span>
       </div>

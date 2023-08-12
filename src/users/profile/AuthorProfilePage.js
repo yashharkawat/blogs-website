@@ -1,15 +1,38 @@
-import React from "react";
+import { collection } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { auth, db } from "../../config/firebase";
+import { getDocs, doc } from "firebase/firestore";
+import './AuthorProfilePage.css';
 
-const AuthorProfilePage= () => {
-    const params=useParams();
+const AuthorProfilePage = () => {
+  const params = useParams();
+  const [author, setAuthor] = useState({});
+  useEffect(() => {
+    const getData = async () => {
+      const userRef = collection(db, "users");
+      const data = await getDocs(userRef);
+      const filterUsers = data.docs.map((item) => item.data());
+      //console.log(filterUsers);
+      const user = filterUsers.filter((item) => {
+        return (item.name === params.name);
+      })[0];
+      setAuthor(user);
+      // console.log("params", params.name);
+     // console.log(user);
+    };
+    try {
+      getData();
+    } catch (err) {
+      console.log(err);
+    }
+  }, [params.name]);
   return (
     <div className="author-profile">
-      <h2>{params.name}</h2>
-      <p>Email: 'johnDoe@gmail.com'</p>
-      <p>Bio: 'Hi, its my bio'</p>
-      
-      
+      <h2>{author.name}</h2>
+      <p>Age: {author.age}</p>
+      <p>Bio: {author.bio}</p>
+      <p>Email: {author.email}</p>
     </div>
   );
 };

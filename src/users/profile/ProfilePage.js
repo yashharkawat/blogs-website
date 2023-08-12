@@ -9,7 +9,7 @@ import { updateDoc, doc, getDocs, collection } from "firebase/firestore";
 const ProfilePage = () => {
   const user=useSelector(state=>state);
   const [show,setShow]=useState(false);
-  console.log("yash",user);
+  //console.log("yash",user);
   return (
     <div className="profile-container">
       <h1 className="heading">Welcome, {user.name}</h1>

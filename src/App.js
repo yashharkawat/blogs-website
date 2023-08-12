@@ -16,6 +16,9 @@ import TopicListPage from './posts/Topics/TopicList';
 import PayToViewContent from './Pay/PayToViewContent';
 import AuthorProfilePage from './users/profile/AuthorProfilePage';
 import SavedPosts from './posts/saved/SavedPosts';
+import StripeContainer from "./Payment/StripeContainer";
+import MyPost from "./users/MyPost";
+import RevisionHistory from "./RevisionHistory/RevisionHistory";
 const router=createBrowserRouter([
 {
   path:'/',
@@ -63,6 +66,18 @@ const router=createBrowserRouter([
     {
       path:'saved-posts',
       element:<SavedPosts />
+    },
+    {
+      path:'stripe',
+      element:<StripeContainer />
+    },
+    {
+      path:'/my-posts',
+      element:<MyPost />
+    },
+    {
+      path:'/revision-history',
+      element:<RevisionHistory />
     }
   ]
 },

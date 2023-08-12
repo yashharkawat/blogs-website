@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
 import './Comment.css'
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {db} from '../../config/firebase';
 import { updateDoc,doc } from "firebase/firestore";
-
+import { setRevisionHistory } from "../../actions/setRevisionHistory";
 
 const Comment = (props) => {
   const name=useSelector(state=>state.name);
   const [content, setContent] = useState("");
   const [comments, setComments] = useState(props.comments);
-
+  const currUser=useSelector(state=>state);
+  const dispatch=useDispatch();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,6 +21,8 @@ const Comment = (props) => {
     //setPost(newPost);
     const currentPostRef=doc(db,"articles",props.post.id);
     await updateDoc(currentPostRef,newPost);
+    setRevisionHistory(currUser.revisionHistory,dispatch,currUser,props.post.title,"commented");
+  
     setContent("");
   };
 

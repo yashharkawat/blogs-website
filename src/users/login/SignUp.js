@@ -36,6 +36,9 @@ const SignUp = () => {
       saved: [],
       lastResetTime: Date.now(),
       numOfViewsToday: 0,
+      totalPostViews:1,
+      revisionHistory:[],
+      followers:[],
     };
     dispatch(
       actions.changeCurrentUser({...updatedUser,id: data.id})
@@ -54,6 +57,9 @@ const SignUp = () => {
         saved: [],
         lastResetTime: Date.now(),
         numOfViewsToday: 0,
+        totalPostViews:1,
+        revisionHistory:[],
+        followers:[],
       };
       const newdata = addUser(user);
       dispatch(actions.changeCurrentUser({ ...user, id: newdata.id }));

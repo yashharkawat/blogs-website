@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { db } from "../../config/firebase";
 import { updateDoc, doc } from "firebase/firestore";
 import { actions } from "../../store/index";
+import { setRevisionHistory } from "../../actions/setRevisionHistory";
 
 export const getDateString = (date) => {
   if (date === undefined || date === null) return "";
@@ -28,6 +29,20 @@ export const getDateString = (date) => {
   } catch (err) {}
   return date;
 };
+const doReset = (time) => {
+  const currentTimestamp = Date.now();
+  const lastResetTimestamp = time;
+
+  const timeDifference = currentTimestamp - lastResetTimestamp;
+  const twentyFourHoursInMilliseconds = 24 * 60 * 60 * 1000;
+
+  if (timeDifference > twentyFourHoursInMilliseconds) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
 const Post = (props, { deletePost }) => {
   const [post, setPost] = useState(props.post);
   const [like, setLike] = useState(false);
@@ -51,16 +66,31 @@ const Post = (props, { deletePost }) => {
     } catch (err) {
       console.log(err);
     }
-    // try {
-    //   const user = doc(db, "users", currUser.id);
-    //   const num = currUser.numOfViewsToday + 1;
-    //   dispatch(actions.changeCurrentUserViews(num));
-    //   const newUser = { ...currUser, numOfViewsToday: num };
-    //   await updateDoc(user, newUser);
-    // } catch (err) {
-    //   console.log(err);
-    // }
-    navigate(`/post-details/${post.id}`);
+    try {
+      if (doReset(currUser.lastResetTime)) {
+        const user = doc(db, "users", currUser.id);
+        const num = 0;
+        dispatch(actions.changeCurrentUserViews(num));
+        const newUser = { ...currUser, numOfViewsToday: num };
+        await updateDoc(user, newUser);
+      }
+      const user = doc(db, "users", currUser.id);
+      const num = currUser.numOfViewsToday + 1;
+      if (num > currUser.totalPostViews) {
+        prompt(
+          "You have reached the end for your post views. But a plan to view more"
+        );
+      } else {
+        dispatch(actions.changeCurrentUserViews(num));
+        const newUser = { ...currUser, numOfViewsToday: num };
+        await updateDoc(user, newUser);
+        setRevisionHistory(currUser.revisionHistory,dispatch,currUser,post.title,"viewed");
+  
+        navigate(`/post-details/${post.id}`);
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
   const userId = useSelector((state) => state.id);
 
@@ -78,22 +108,27 @@ const Post = (props, { deletePost }) => {
     const newLikes = [...post.liked_by, userId];
     const newPost = { ...post, liked_by: newLikes };
     setPost(newPost);
-    //setPost(newPost);
-    console.log(newPost);
     const currentPostRef = doc(db, "articles", post.id);
     await updateDoc(currentPostRef, newPost);
+    setRevisionHistory(currUser.revisionHistory,dispatch,currUser,post.title,"liked");
+  
   };
   const unlikeHandler = async () => {
     setLike(false);
     const newLikes = post.liked_by.filter((user) => user !== userId);
     const newPost = { ...post, liked_by: newLikes };
     setPost(newPost);
-    //setPost(newPost);
-    //console.log(newPost);
+    
     const currentPostRef = doc(db, "articles", post.id);
     await updateDoc(currentPostRef, newPost);
+    setRevisionHistory(currUser.revisionHistory,dispatch,currUser,post.title,"removed like");
+  
   };
-
+  const deleteHandler=()=>{
+    console.log('hello');
+    props.deletePost(post.id);
+    setRevisionHistory(currUser.revisionHistory,dispatch,currUser,post.title,"deleted");
+  }
   return (
     <div className="post" id={post.id}>
       <div className="text-post">
@@ -117,7 +152,7 @@ const Post = (props, { deletePost }) => {
             <div> {`  ${readTime}`} min read</div>
           </div>
           <div className="navbar-right">
-            <SaveForLater postId={post.id} />
+            <SaveForLater postId={post.id} title={post.title}/>
             {myPost && (
               <>
                 <Link to={`/edit/${post.id}`} className="flex-item">
@@ -140,7 +175,7 @@ const Post = (props, { deletePost }) => {
                 </Link>
                 <div
                   className="pointer"
-                  onClick={() => props.deletePost(post.id)}
+                  onClick={deleteHandler}
                 >
                   <img src={deleteImage} alt="delete" />
                 </div>

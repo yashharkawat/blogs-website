@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { db } from "../../config/firebase";
 import { updateDoc, doc } from "firebase/firestore";
 import { actions } from "../../store/index";
-
+import { setRevisionHistory } from "../../actions/setRevisionHistory";
 const SaveForLater = (props) => {
   const userId = useSelector((state) => state.id);
   const currentUser = useSelector((state) => state);
@@ -11,7 +11,8 @@ const SaveForLater = (props) => {
 
   const [save, setSave] = useState(false);
   const dispatch = useDispatch();
-
+  const revisionHistory=useSelector(state=>state.revisionHistory);
+  const currUser=useSelector(state=>state);
   useEffect(() => {
     try {
       if (savedPostId.includes(props.postId)) {
@@ -37,10 +38,12 @@ const SaveForLater = (props) => {
     const save = { arr: newSaved };
     //console.log(save);
     dispatch(actions.changeCurrentUserSaved(save));
-    const newUser = { ...currentUser, saved: newSaved };
+    const newUser = { ...currentUser, saved: newSaved};
     //console.log(newSaved);
     await updateDoc(user, newUser);
     setSave(true);
+    
+    setRevisionHistory(revisionHistory,dispatch,currUser,props.title,"saved");
     //save post here
   };
   const unsaveHandler = async (e) => {
@@ -53,6 +56,8 @@ const SaveForLater = (props) => {
     console.log(newSaved);
     await updateDoc(user, newUser);
     setSave(false);
+    setRevisionHistory(revisionHistory,dispatch,currUser,props.title,"removed from saved posts");
+    
     //save post here
   };
   return (

@@ -10,7 +10,8 @@ import { getDateString } from "./Post";
 import { db } from "../../config/firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { updateDoc, doc } from "firebase/firestore";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { actions } from "../../store";
 
 const PostDetails = () => {
   const params = useParams();
@@ -24,6 +25,20 @@ const PostDetails = () => {
   const userId = useSelector((state) => state.id);
   const [myPost, setMyPost] = useState(false);
   const username = useSelector((state) => state.name);
+  const followingName = useSelector((state) => state.followers);
+  const currUser = useSelector((state) => state);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (followingName !== undefined) {
+      console.log('useEffect',followingName);
+      if (followingName.includes(post.author)) {
+        //console.log('author',post.author);
+        setFollowing(true);
+      };
+      
+    }
+  },[followingName,post.author]);
 
   useEffect(() => {
     setLoading(true);
@@ -76,11 +91,46 @@ const PostDetails = () => {
     const newLikes = post.liked_by.filter((user) => user !== userId);
     const newPost = { ...post, liked_by: newLikes };
     setPost(newPost);
-    //setPost(newPost);
-    //console.log(newPost);
     const currentPostRef = doc(db, "articles", post.id);
     await updateDoc(currentPostRef, newPost);
   };
+  const follow = async () => {
+    setFollowing(true);
+    try {
+      let newFollows=[];
+      if(followingName===undefined){
+        newFollows.push(post.author);
+      }
+      else{
+        newFollows = [post.author, ...currUser.followers];
+      }
+      dispatch(actions.changeCurrentUserFollowers(newFollows));
+      console.log(currUser);
+      const userRef = doc(db, "users", userId);
+      const newUser = { ...currUser, followers: newFollows };
+      await updateDoc(userRef, newUser);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const unfollow = async () => {
+    setFollowing(false);
+    try {
+      const newFollows = currUser.followers.filter(
+        (item) => {
+          console.log(item,post.author);
+          return item !== post.author;
+        }
+      );
+      dispatch(actions.changeCurrentUserFollowers(newFollows));
+      const userRef = doc(db, "users", userId);
+      const newUser = { ...currUser, followers: newFollows };
+      await updateDoc(userRef, newUser);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   if (loading) return <div>Loading</div>;
   return (
     <div className="details-container">
@@ -93,18 +143,12 @@ const PostDetails = () => {
       <div className="flex">
         <p className="flex-item">Author: {post.author} </p>
         {!following && (
-          <div
-            className="flex-item pointer blue"
-            onClick={() => setFollowing(true)}
-          >
+          <div className="flex-item pointer blue" onClick={follow}>
             Follow
           </div>
         )}
         {following && (
-          <div
-            className="flex-item pointer blue"
-            onClick={() => setFollowing(false)}
-          >
+          <div className="flex-item pointer blue" onClick={unfollow}>
             Following
           </div>
         )}
@@ -172,7 +216,7 @@ const PostDetails = () => {
           </div>
           <div className="navbar-right">
             <SaveForLater postId={post.id} />
-            
+
             {myPost && (
               <Link to={`/edit/${post.id}`}>
                 <svg

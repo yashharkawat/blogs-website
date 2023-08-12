@@ -45,6 +45,7 @@ const MyPost = () => {
       {posts.map((post, index) => (
         <Post key={index} post={post} deletePost={deletePostHandler} />
       ))}
+      {posts.length===0&&<h4>You haven't added any posts</h4>}
     </div>
   );
 };

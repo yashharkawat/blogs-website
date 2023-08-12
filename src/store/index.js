@@ -12,6 +12,9 @@ const initialState = {
   saved: "",
   numOfViewsToday: 0,
   lastResetTime: "",
+  totalPostViews:1,
+  revisionHistory:[],
+  followers:[],
 };
 
 const userSlice = createSlice({
@@ -31,6 +34,9 @@ const userSlice = createSlice({
         state.saved = action.payload.saved;
         state.numOfViewsToday = action.payload.numOfViewsToday;
         state.lastResetTime = action.payload.lastResetTime;
+        state.totalPostViews = action.payload.totalPostViews;
+        state.revisionHistory=action.payload.revisionHistory;
+        state.followers=action.payload.followers;
       }
     },
     changeCurrentUserEmail(state, action) {
@@ -57,6 +63,15 @@ const userSlice = createSlice({
     changeCurrentUserLastResetTime(state, action) {
       state.lastResetTime = action.payload;
     },
+    changeCurrentUserTotalPostViews(state,action){
+      state.totalPostViews=action.payload;
+    },
+    changeCurrentUserRevisionHistory(state,action){
+      state.revisionHistory=action.payload;
+    },
+    changeCurrentUserFollowers(state,action){
+      state.followers=action.payload;
+    }
   },
 });
 const persistConfig = {

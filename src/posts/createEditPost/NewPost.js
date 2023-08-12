@@ -5,13 +5,20 @@ import { Link } from 'react-router-dom';
 import './NewPost.css'
 import { collection, addDoc, updateDoc, doc } from 'firebase/firestore';
 import { db } from '../../config/firebase'
-import { useSelector } from 'react-redux';
+import { useSelector,useDispatch } from 'react-redux';
+import { actions } from '../../store';
+import { setRevisionHistory } from '../../actions/setRevisionHistory';
 
 const NewPost = (props) => {
   //const [loading,setLoading]=useState(true);
   const username = useSelector(state => state.name);
   const [initialValues, setInitialValues] = useState({});
   const [loading, setLoading] = useState(true);
+  const revisionHistory=useSelector(state=>state.revisionHistory);
+  const user=useSelector(state=>state);
+  const dispatch=useDispatch();
+  const currUser=useSelector(state=>state);
+
   useEffect(() => {
     setLoading(true);
     setInitialValues({
@@ -34,13 +41,15 @@ const NewPost = (props) => {
     const date = new Date();
     const articlesCollection = collection(db, "articles");
     await addDoc(articlesCollection, { ...values, created_at: date, author: username, view: 0 ,liked_by:[],comments:[]});
+    setRevisionHistory(revisionHistory,dispatch,currUser,values.title,"added");
   }
   const updatePost = async (id, values) => {
 
     const newPost={ ...props.initialValues,...values, author: username};
-    console.log(newPost);
+    //console.log(newPost);
     const article = doc(db, "articles", id);
     await updateDoc(article, newPost);
+    setRevisionHistory(revisionHistory,dispatch,currUser,props.initialValues.title,"updated");
   }
   if (loading) return <div>Loading</div>;
   return (
@@ -50,6 +59,7 @@ const NewPost = (props) => {
         if (props.id === undefined) {
           try {
             addPost(values);
+
           }
           catch (err) { console.log(err) };
           resetForm();

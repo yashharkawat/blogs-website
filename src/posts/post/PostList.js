@@ -25,7 +25,7 @@ const PostList = (props) => {
     });
     setPosts(newData);
     setSearchPosts(newData);
-    console.log(newData);
+    //console.log(newData);
   };
   useEffect(() => {
     try {
@@ -36,7 +36,7 @@ const PostList = (props) => {
   }, []);
 
   useEffect(() => {
-    console.log(props.searchText, posts);
+    //console.log(props.searchText, posts);
     if (props.searchText !== undefined && props.filter !== undefined) {
       const newSearchPosts = posts.filter(
         (post) =>
@@ -63,12 +63,14 @@ const PostList = (props) => {
         if (props.filter.comments === "") return true;
         return props.filter.comments <= post.comments;
       });
-      console.log("search", searchPosts);
+      //console.log("search", searchPosts);
       setSearchPosts(filterPosts);
     }
   }, [props.filter, props.searchText]);
   const deletePostHandler = async (postId) => {
     const articleDoc = doc(db, "articles", postId);
+    const filterPosts=posts.filter((post)=>post.id!=postId);
+    setPosts(filterPosts);
     await deleteDoc(articleDoc);
   };
 

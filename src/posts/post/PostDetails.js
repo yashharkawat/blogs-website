@@ -31,44 +31,44 @@ const PostDetails = () => {
 
   useEffect(() => {
     if (followingName !== undefined) {
-      console.log('useEffect',followingName);
+      console.log("useEffect", followingName);
       if (followingName.includes(post.author)) {
         //console.log('author',post.author);
         setFollowing(true);
-      };
-      
+      }
     }
-  },[followingName,post.author]);
+  }, [followingName, post.author]);
+
+  const getArticles = async () => {
+    setLoading(true);
+    const articlesCollection = collection(db, "articles");
+    const data = await getDocs(articlesCollection);
+    const filteredData = data.docs.map((doc) => ({
+      ...doc.data(),
+      id: doc.id,
+    }));
+    const filteredPost = filteredData.filter((data) => data.id === params.id);
+    //console.log(filteredPost);
+    const newData = filteredPost.map((item) => {
+      if (item.liked_by === undefined && item.comments === undefined) {
+        return { ...item, liked_by: [], comments: [] };
+      } else if (item.liked_by === undefined) {
+        return { ...item, liked_by: [] };
+      } else if (item.comments === undefined) {
+        return { ...item, comments: [] };
+      } else return item;
+    });
+    setPost(newData[0]);
+    console.log(newData[0]);
+    setLoading(false);
+    const postDetails = newData[0];
+    if (postDetails.liked_by.includes(userId)) {
+      setLike(true);
+    }
+    if (postDetails.author === username) setMyPost(true);
+  };
 
   useEffect(() => {
-    setLoading(true);
-    const getArticles = async () => {
-      const articlesCollection = collection(db, "articles");
-      const data = await getDocs(articlesCollection);
-      const filteredData = data.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      }));
-      const filteredPost = filteredData.filter((data) => data.id === params.id);
-      //console.log(filteredPost);
-      const newData = filteredPost.map((item) => {
-        if (item.liked_by === undefined && item.comments === undefined) {
-          return { ...item, liked_by: [], comments: [] };
-        } else if (item.liked_by === undefined) {
-          return { ...item, liked_by: [] };
-        } else if (item.comments === undefined) {
-          return { ...item, comments: [] };
-        } else return item;
-      });
-      setPost(newData[0]);
-      console.log(newData[0]);
-      setLoading(false);
-      const postDetails = newData[0];
-      if (postDetails.liked_by.includes(userId)) {
-        setLike(true);
-      }
-      if (postDetails.author === username) setMyPost(true);
-    };
     try {
       getArticles();
     } catch (err) {
@@ -97,11 +97,10 @@ const PostDetails = () => {
   const follow = async () => {
     setFollowing(true);
     try {
-      let newFollows=[];
-      if(followingName===undefined){
+      let newFollows = [];
+      if (followingName === undefined) {
         newFollows.push(post.author);
-      }
-      else{
+      } else {
         newFollows = [post.author, ...currUser.followers];
       }
       dispatch(actions.changeCurrentUserFollowers(newFollows));
@@ -116,12 +115,10 @@ const PostDetails = () => {
   const unfollow = async () => {
     setFollowing(false);
     try {
-      const newFollows = currUser.followers.filter(
-        (item) => {
-          console.log(item,post.author);
-          return item !== post.author;
-        }
-      );
+      const newFollows = currUser.followers.filter((item) => {
+        console.log(item, post.author);
+        return item !== post.author;
+      });
       dispatch(actions.changeCurrentUserFollowers(newFollows));
       const userRef = doc(db, "users", userId);
       const newUser = { ...currUser, followers: newFollows };
@@ -129,6 +126,17 @@ const PostDetails = () => {
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const closeCommentHandler = () => {
+    setComment(false);
+  };
+  const addCommentHandler = (author,content) => {
+    const comm={author,content};
+    const newComments=[comm,...post.comments];
+    setPost(prev=>{
+      return {...prev,comments:newComments};
+    })
   };
 
   if (loading) return <div>Loading</div>;
@@ -240,14 +248,13 @@ const PostDetails = () => {
             )}
           </div>
 
-          {comment && <Comment comments={post.comments} post={post} />}
           {comment && (
-            <button
-              onClick={() => setComment(false)}
-              className="logout-button absolute"
-            >
-              Close
-            </button>
+            <Comment
+              comments={post.comments}
+              post={post}
+              close={closeCommentHandler}
+              addComment={addCommentHandler}
+            />
           )}
         </div>
         <div className="flex-item">

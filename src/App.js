@@ -68,10 +68,6 @@ const router=createBrowserRouter([
       element:<SavedPosts />
     },
     {
-      path:'stripe',
-      element:<StripeContainer />
-    },
-    {
       path:'/my-posts',
       element:<MyPost />
     },

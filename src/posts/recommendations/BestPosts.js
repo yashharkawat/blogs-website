@@ -55,10 +55,12 @@ const BestPosts = () => {
 
   return (
     <div>
-      <h2>Top Posts</h2>
-      {bestPosts.map((post) => {
-        return <Post post={post} deletePost={deleteHandler} />;
-      })}
+      <h2 style={{textAlign:"center"}}>Top Posts</h2>
+      <div className="post-list">
+        {bestPosts.map((post) => {
+          return <Post post={post} deletePost={deleteHandler} />;
+        })}
+      </div>
     </div>
   );
 };

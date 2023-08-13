@@ -1,4 +1,8 @@
-
+.topic-list-container{
+  width:100%;
+  display: flex;
+  justify-content: space-between;
+}
 .width{
   max-width: 500px;
 }

@@ -38,7 +38,7 @@ const SimilarAuthor = (props) => {
   const deletePostHandler = () => {};
   return (
     <>
-      <h2>Posts by a similar author</h2>
+      <h2 style={{textAlign:"center"}}>Posts by a similar author</h2>
       <div className="post-list">
         {posts.map((post, index) => (
           <Post key={index} post={post} deletePost={deletePostHandler} />

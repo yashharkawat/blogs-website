@@ -3,7 +3,7 @@ import { getDocs, collection } from "firebase/firestore";
 import Post from "../posts/post/Post";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { deleteDoc, doc } from "firebase/firestore";
+import { deletePostHandler } from "../actions/deletePosthandler";
 const MyPost = () => {
   const [posts, setPosts] = useState([]);
   const username = useSelector((state) => state.name);
@@ -35,16 +35,17 @@ const MyPost = () => {
     }
   }, []);
 
-  const deletePostHandler = async (postId) => {
-    const articleDoc = doc(db, "articles", postId);
-    await deleteDoc(articleDoc);
-  };
+  const handleDelete=async(postId)=>{
+    const filter=posts.filter(post=>post.id!==postId);
+    setPosts(filter);
+    await deletePostHandler(postId);
+  }
   return (
     <div>
       <h2 style={{ textAlign: "center" }}>My posts</h2>
       <div className="post-list">
         {posts.map((post, index) => (
-          <Post key={index} post={post} deletePost={deletePostHandler} />
+          <Post key={index} post={post} deletePost={handleDelete} />
         ))}
       </div>
       {posts.length === 0 && (

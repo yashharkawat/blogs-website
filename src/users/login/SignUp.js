@@ -141,7 +141,7 @@ const SignUp = () => {
               <div className="error">{errors.password}</div>
             )}
 
-            <button type="submit" className="button">
+            <button type="submit" className="login-button">
               Sign up
             </button>
           </form>
@@ -153,9 +153,9 @@ const SignUp = () => {
           You already have an account
         </div>
       )}
-      <button onClick={signUpWithGoogle} className="button">
+      {/* <button onClick={signUpWithGoogle} className="button">
         Sign Up With Google
-      </button>
+      </button> */}
       <div className="login-text">
         <span>Already have an account? </span>
         <Link to="/login" className="signin-link">

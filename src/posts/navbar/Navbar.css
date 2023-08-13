@@ -36,10 +36,12 @@
   cursor: pointer;
   margin-left: 20px;
   font-weight: bold;
+  margin-right: 20px;
 }
 .filter-button {
-  background-color: #dc3545;
-  color: #ffffff;
+  background-color: #ff5733;
+  
+  color: white;
   border: none;
   padding: 8px 12px;
   border-radius: 5px;
@@ -49,6 +51,22 @@
   margin-bottom: 5px;
 }
 
+.filter-button:hover {
+  background-color: #e64719; /* Slightly darker shade of orange on hover */
+}
+.filter-form{
+  color:rgb(182, 182, 182);
+}
+.filter-form-input{
+  background-color: #242424;
+  color: white;
+  border-radius:8px;
+  padding:8px;
+  outline: none;
+  margin-left:10px;
+  border: 1px solid grey;
+  margin-bottom: 8px;
+}
 .navbar-container {
   display: flex;
   justify-content: space-between;
@@ -101,6 +119,7 @@
   font-size: 1.5rem;
   font-weight: 500;
   outline: none;
+  margin-bottom: 30px;
   
 }
 .margin-top{

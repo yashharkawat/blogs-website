@@ -67,7 +67,7 @@ const SaveForLater = (props) => {
           <svg
             onClick={saveHandler}
             aria-label="Save"
-            color="rgb(0, 0, 0)"
+            color="white"
             fill="rgb(0, 0, 0)"
             height="24"
             role="img"
@@ -91,8 +91,8 @@ const SaveForLater = (props) => {
         <svg
           onClick={unsaveHandler}
           aria-label="Remove"
-          color="rgb(0, 0, 0)"
-          fill="rgb(0, 0, 0)"
+          color="white"
+          fill="#e7e7e7"
           height="24"
           role="img"
           viewBox="0 0 24 24"

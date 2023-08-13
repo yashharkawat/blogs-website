@@ -1,5 +1,5 @@
 import React from "react";
-import Post from "./Post";
+import Post, { getDateString } from "./Post";
 import { useEffect, useState } from "react";
 import { db } from "../../config/firebase";
 import { getDocs, collection, doc, deleteDoc } from "firebase/firestore";
@@ -53,7 +53,8 @@ const PostList = (props) => {
       });
       filterPosts = filterPosts.filter((post) => {
         if (props.filter.date === "") return true;
-        return props.filter.date === post.date;
+
+        return props.filter.date === getDateString(post.created_at);
       });
       filterPosts = filterPosts.filter((post) => {
         if (props.filter.likes === "") return true;
@@ -69,9 +70,12 @@ const PostList = (props) => {
   }, [props.filter, props.searchText]);
   const deletePostHandler = async (postId) => {
     const articleDoc = doc(db, "articles", postId);
-    const filterPosts=posts.filter((post)=>post.id!=postId);
+    const filterPosts = posts.filter((post) => post.id != postId);
     setPosts(filterPosts);
     await deleteDoc(articleDoc);
+    try {
+      getArticles();
+    } catch (err) {}
   };
 
   return (

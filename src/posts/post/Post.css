@@ -93,8 +93,13 @@
   align-items: center;
 }
 .blue {
-  color: blue;
+  color: rgb(191, 136, 33);
 }
+.blue:hover,.blue.active{
+  color: rgb(255, 182, 47);
+  text-decoration: underline;
+}
+
 .margin-bottom {
   margin-bottom: 10px;
 }
@@ -102,4 +107,7 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
+}
+.border-red{
+  border:1px solid red;
 }

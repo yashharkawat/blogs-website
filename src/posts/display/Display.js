@@ -20,6 +20,7 @@ const Display = () => {
   const [topics, setTopics] = useState(false);
   const filterHandler = (filterValues) => {
     setFilter(filterValues);
+    console.log(filterValues);
   };
   const id = useSelector((state) => state.id);
   console.log(id);
@@ -40,9 +41,9 @@ const Display = () => {
           type="text"
           value={search}
         ></input>
-        <Filter sendFilter={filterHandler} />
+        {/* <Filter sendFilter={filterHandler} /> */}
       </div>
-      <TopicListPage active={topicHandler} />
+      <TopicListPage active={topicHandler} sendFilter={filterHandler} />
 
       {!topics && <PostList searchText={search} filter={filter} />}
     </div>

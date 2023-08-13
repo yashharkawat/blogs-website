@@ -2,7 +2,7 @@ import BestPosts from "./BestPosts";
 
 const RecommendedPosts = () => {
   return (
-    <div>
+    <div >
       <BestPosts />
     </div>
   );

@@ -3,7 +3,7 @@ import "./TopicList.css";
 import Post from "../post/Post";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../config/firebase";
-
+import { Filter } from "../Filter";
 const TopicListPage = (props) => {
   const [selectedTopic, setSelectedTopic] = useState(null);
   const [posts, setPosts] = useState([]);
@@ -56,7 +56,9 @@ const TopicListPage = (props) => {
   };
   const deletePostHandler = (postId) => {};
   return (
+    <>
     <div className="topic-list-container">
+      <div>
       <div className="flex space-between width">
         <h2>Search by Topics</h2>
         <div className="clear-all" onClick={clearHandler}>
@@ -74,20 +76,25 @@ const TopicListPage = (props) => {
           </div>
         ))}
       </div>
+      </div>
 
-      {selectedTopic && (
-        <div className="post-list">
-          {posts.map((post) => (
-            <Post
-              key={post.id}
-              id={post.id}
-              post={post}
-              deletePost={(e) => deletePostHandler()}
-            />
-          ))}
-        </div>
-      )}
+      <div>
+        <Filter sendFilter={props.sendFilter}/>
+      </div>
     </div>
+    {selectedTopic && (
+      <div className="post-list">
+        {posts.map((post) => (
+          <Post
+            key={post.id}
+            id={post.id}
+            post={post}
+            deletePost={(e) => deletePostHandler()}
+          />
+        ))}
+      </div>
+    )}
+    </>
   );
 };
 

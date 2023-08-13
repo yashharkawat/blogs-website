@@ -128,9 +128,9 @@ const Login = () => {
         </div>
       )}
 
-      <button className="login-button" onClick={signInWithGoogle}>
+      {/* <button className="login-button" onClick={signInWithGoogle}>
         Sign in with google
-      </button>
+      </button> */}
       <div className="login-text">
         <span>Don't have an account? </span>
         <Link to="/signup" className="signin-link">

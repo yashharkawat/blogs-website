@@ -4,14 +4,14 @@ import Post from "../post/Post";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../config/firebase";
 
-const TopicListPage = () => {
+const TopicListPage = (props) => {
   const [selectedTopic, setSelectedTopic] = useState(null);
   const [posts, setPosts] = useState([]);
   const [topics, setTopics] = useState([]);
 
   const handleTopicClick = (topic) => {
     setSelectedTopic(topic);
-    console.log(topic);
+    props.active(true);
   };
 
   useEffect(() => {
@@ -50,22 +50,36 @@ const TopicListPage = () => {
       console.log(err);
     }
   }, [selectedTopic]);
-
+  const clearHandler = () => {
+    props.active(false);
+    setSelectedTopic(null);
+  };
   const deletePostHandler = (postId) => {};
   return (
     <div className="topic-list-container">
-      <h1>Topic List</h1>
-      <ul className="topic-list">
+      <div className="flex space-between width">
+        <h2>Search by Topics</h2>
+        <div className="clear-all" onClick={clearHandler}>
+          Clear all
+        </div>
+      </div>
+      <div className="topic-list">
         {topics.map((topic) => (
-          <li onClick={() => handleTopicClick(topic)}>{topic}</li>
+          <div
+            key={topic.id}
+            className={`topics ${selectedTopic === topic ? "active" : ""}`}
+            onClick={() => handleTopicClick(topic)}
+          >
+            {topic}
+          </div>
         ))}
-      </ul>
+      </div>
 
       {selectedTopic && (
         <div className="post-list">
-          {posts.map((post, index) => (
+          {posts.map((post) => (
             <Post
-              key={index}
+              key={post.id}
               id={post.id}
               post={post}
               deletePost={(e) => deletePostHandler()}

@@ -1,22 +1,21 @@
 /* RevisionHistory.css */
 
 .revision-history-container {
-    border: 1px solid #ccc;
+    border: none;
     padding: 20px;
     margin: 20px;
-    background-color: #f7f7f7;
+    
   }
   
   .revision-list {
-    list-style: none;
+    color: rgba(218, 218, 218, 0.729);
     padding: 0;
   }
   
   .revision-item {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     padding: 10px;
-    border: 1px solid #ddd;
-    background-color: #fff;
+    
   }
  
   

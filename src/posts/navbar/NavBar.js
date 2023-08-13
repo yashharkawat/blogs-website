@@ -1,24 +1,16 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Formik } from "formik";
-import { useState } from "react";
 import "./Navbar.css";
 import profileImage from "../../images/profile.png";
 import { signOut } from "firebase/auth";
 import { auth } from "../../config/firebase";
 import { useDispatch, useSelector } from "react-redux";
 import { actions } from "../../store";
+import Button from "@mui/material/Button";
 
 const NavBar = (props) => {
-  const initialValues = {
-    author: "",
-    date: "",
-    likes: "",
-    comments: "",
-  };
-  const [filter, setFilter] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  
+
   const logoutHandler = async () => {
     try {
       dispatch(actions.changeCurrentUser("reset"));
@@ -30,20 +22,24 @@ const NavBar = (props) => {
       console.log(err);
     }
   };
-  const [searchText, setSearchText] = useState("");
-  const searchHandler = (e) => {
-    setSearchText(e.target.value);
-    props.searchHandler(e.target.value);
-  };
+
   return (
     <>
       <div className="navbar-container">
-        <input
-          className="navbar-search"
-          type="text"
-          placeholder="Search posts"
-          onChange={searchHandler}
-        />
+        <div>
+        <Link to='/saved-posts' className="pages">
+        Saved Posts
+        </Link>
+        <Link to='/my-posts' className="pages">
+        My Posts
+        </Link>
+        <Link to='/revision-history' className="pages">
+        History
+        </Link>
+        <Link to='/pay' className="pages">
+        Buy Posts
+        </Link>
+        </div>
         <div className="navbar-right">
           <Link to="/profile">
             <img
@@ -75,70 +71,6 @@ const NavBar = (props) => {
             Logout
           </button>
         </div>
-      </div>
-
-      <div>
-        {props.hideFilter === true ? (
-          ""
-        ) : (
-          <button className="filter-button" onClick={() => setFilter(true)}>
-            Add Filters
-          </button>
-        )}
-        {filter && (
-          <Formik
-            initialValues={initialValues}
-            onSubmit={(values) => {
-              //console.log(values);
-              setFilter(false);
-              props.sendFilter(values);
-            }}
-          >
-            {({ values, handleChange, handleSubmit }) => (
-              <form onSubmit={handleSubmit}>
-                <div>
-                  <label>Filter by Author: </label>
-                  <input
-                    type="text"
-                    name="author"
-                    value={values.author}
-                    onChange={handleChange}
-                  />
-                </div>
-                <div>
-                  <label>Filter by Date: </label>
-                  <input
-                    type="date"
-                    name="date"
-                    value={values.date}
-                    onChange={handleChange}
-                  />
-                </div>
-                <div>
-                  <label>Filter by Likes: </label>
-                  <input
-                    type="number"
-                    name="likes"
-                    value={values.likes}
-                    onChange={handleChange}
-                  />
-                </div>
-                <div>
-                  <label>Filter by Comments: </label>
-                  <input
-                    type="number"
-                    name="comments"
-                    value={values.comments}
-                    onChange={handleChange}
-                  />
-                </div>
-                <button className="filter-button" type="submit">
-                  Apply Filters
-                </button>
-              </form>
-            )}
-          </Formik>
-        )}
       </div>
     </>
   );

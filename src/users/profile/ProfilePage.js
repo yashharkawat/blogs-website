@@ -11,7 +11,8 @@ const ProfilePage = () => {
   const [show,setShow]=useState(false);
   //console.log("yash",user);
   return (
-    <div className="profile-container">
+    <>
+      <div className="profile-container">
       <h1 className="heading">Welcome, {user.name}</h1>
       <div>
         <p className="paragraph">Age: {user.age}</p>
@@ -24,9 +25,11 @@ const ProfilePage = () => {
         {!show && <button className="button" onClick={() => setShow(true)}>My Posts</button>}
         {show && <button className="button" onClick={() => setShow(false)}>Hide Posts</button>}
 
-        {show && <MyPost />}
+        
       </div>
     </div>
+    {show && <MyPost />}
+    </>
   );
 };
 

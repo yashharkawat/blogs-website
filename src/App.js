@@ -32,10 +32,24 @@ const router=createBrowserRouter([
       element:<ProfilePage />
     },
     {
+      path:'saved-posts',
+      element:<SavedPosts />
+    },
+    {
+      path:'my-posts',
+      element:<MyPost />
+    },
+    {
+      path:'revision-history',
+      element:<RevisionHistory />
+    },
+    {
       path:'editProfile',
       element:<EditProfile />
+    },{
+      path:'pay',
+      element:<PayToViewContent />
     },
-    
     {
       path:'post-details/:id',
       element:<PostDetails />
@@ -52,28 +66,14 @@ const router=createBrowserRouter([
       path:'edit/:id',
       element:<Edit />
     },
-    {
-      path:'topics',
-      element:<TopicListPage />
-    },{
-      path:'pay',
-      element:<PayToViewContent />
-    },
+    
     {
       path:'authors/:name',
       element:<AuthorProfilePage />
     },
     {
-      path:'saved-posts',
-      element:<SavedPosts />
-    },
-    {
-      path:'/my-posts',
-      element:<MyPost />
-    },
-    {
-      path:'/revision-history',
-      element:<RevisionHistory />
+      path:'topics',
+      element:<TopicListPage />
     }
   ]
 },

@@ -28,7 +28,7 @@ const SaveForLater = (props) => {
     //console.log(user.doc.data());
     let newSaved=[];
 
-    if (currentUser.saved === undefined) {
+    if (currentUser.saved === undefined||currentUser.saved===null) {
         newSaved .push(props.postId);
         console.log("un");
       } else {

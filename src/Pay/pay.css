@@ -2,6 +2,7 @@
   max-width: 700px;
   margin: 0 auto;
   padding: 20px;
+  
 }
 
 .content-title {
@@ -43,7 +44,7 @@
 }
 .selected-option {
   margin-top: 20px;
-  background-color: #e0f2f1;
+  background-color: #2b938c8d;
   padding: 10px;
   border-radius: 5px;
 }

@@ -2,8 +2,10 @@ import PostList from "../post/PostList";
 import NavBar from "../navbar/NavBar";
 import { useState } from "react";
 import "./Display.css";
-import Button from "@mui/material/Button";
+
 import { useSelector } from "react-redux";
+import { Filter } from "../Filter";
+import TopicListPage from "../Topics/TopicList";
 
 const Display = () => {
   // const user=useSelector(state=>state);
@@ -15,51 +17,35 @@ const Display = () => {
     likes: "",
     comments: "",
   });
-
-  const searchHandler = (searchText) => {
-    setSearch(searchText);
-  };
+  const [topics, setTopics] = useState(false);
   const filterHandler = (filterValues) => {
     setFilter(filterValues);
   };
-  const id=useSelector(state=>state.id);
+  const id = useSelector((state) => state.id);
   console.log(id);
+  const searchHandler = (e) => {
+    setSearch(e.target.value);
+  };
+  const topicHandler = (val) => {
+    setTopics(val);
+  };
   return (
-    <>
-      <h2 className="page-heading container">
-        <p className="text">Your Feed</p>
-      </h2>
-      <NavBar searchHandler={searchHandler} sendFilter={filterHandler} />
-      <div className="button-sheet">
-        <span className="button-style">
-          <Button variant="contained" href="/topics">
-            Topics
-          </Button>
-        </span>
-        <span className="button-style">
-          <Button variant="contained" href="/pay">
-            Buy Posts
-          </Button>
-        </span>
-        <span className="button-style">
-          <Button variant="contained" href="/saved-posts">
-            Saved Posts
-          </Button>
-        </span>
-        <span className="button-style">
-          <Button variant="contained" href="/my-posts">
-            My Posts
-          </Button>
-        </span>
-        <span className="button-style">
-          <Button variant="contained" href="/revision-history">
-            Revision History
-          </Button>
-        </span>
+    <div className="display-container">
+      <NavBar />
+      <div className="flex space-between margin-top">
+        <input
+          onChange={searchHandler}
+          placeholder="Search posts"
+          className="search-input"
+          type="text"
+          value={search}
+        ></input>
+        <Filter sendFilter={filterHandler} />
       </div>
+      <TopicListPage active={topicHandler} />
 
-      <PostList searchText={search} filter={filter} />
-    </>
+      {!topics && <PostList searchText={search} filter={filter} />}
+    </div>
   );
 };
 export default Display;

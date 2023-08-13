@@ -41,11 +41,15 @@ const MyPost = () => {
   };
   return (
     <div>
-      <h2>My posts</h2>
-      {posts.map((post, index) => (
-        <Post key={index} post={post} deletePost={deletePostHandler} />
-      ))}
-      {posts.length===0&&<h4>You haven't added any posts</h4>}
+      <h2 style={{ textAlign: "center" }}>My posts</h2>
+      <div className="post-list">
+        {posts.map((post, index) => (
+          <Post key={index} post={post} deletePost={deletePostHandler} />
+        ))}
+      </div>
+      {posts.length === 0 && (
+        <h4 style={{ textAlign: "center" }}>You haven't added any posts</h4>
+      )}
     </div>
   );
 };

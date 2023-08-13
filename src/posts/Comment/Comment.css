@@ -7,7 +7,7 @@
   position: absolute;
   top: 0px;
   right: 0px;
-  background-color: rgba(237, 235, 216, 0.916);
+  background-color: rgba(31, 30, 29, 0.775);
   padding: 20px;
   width: 300px;
   z-index: 50;
@@ -43,13 +43,17 @@
   font-size: large;
 }
 .comment-button{
-  background-color: rgb(26, 137, 23);
+  background-color: rgb(34, 146, 31);
   color: white;
   font-weight: bold;
   padding: 10px 20px;
   border-radius: 10px;
   border: none;
   margin-top: 5px;
+  cursor: pointer;
+}
+.comment-button:hover{
+  background-color: rgb(26, 196, 21);
 }
 .text-area{
   width:100%;

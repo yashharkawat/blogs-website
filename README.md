@@ -1,6 +1,10 @@
-1) Go to the server folder than run npm install , then run node index.js
-2) Go to the main folder (articles-client-react) then run npm install, then npm start
-3) The server is used for payment method (stripe ,Fake Payment Card Number -4242424242424242)
+# BLOGS WEBSITE
+A website for all your blogs, where you can read posts, write posts, search and filter for posts. You can also like or save posts for later.
+
+# How to Run the repository
+- Go to the server folder than run npm install , then run node index.js
+- Go to the main folder (articles-client-react) then run npm install, then npm start
+- The server is used for payment method (stripe ,Fake Payment Card Number -4242424242424242)
 
 I have also deployed the project here  --->
 https://blogs-project-fdc4c.web.app/

@@ -1,21 +1,23 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { Outlet, useNavigate } from "react-router-dom";
-import { auth, db } from "../config/firebase";
-import { getDoc, doc } from "firebase/firestore";
-import firebase from "firebase/app";
-import "firebase/auth";
+import { auth } from "../config/firebase";
 import { onAuthStateChanged } from "firebase/auth";
+
 const Root = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
-  onAuthStateChanged(auth, (currentUser) => {
-    if (currentUser) {
-    } else {
-      navigate("/login");
-    }
-  });
+  const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (!currentUser) {
+        navigate("/welcome");
+      }
+      setLoading(false);
+    });
+    return () => unsubscribe();
+  }, [navigate]);
+
+  if (loading) return null;
   return <Outlet />;
 };
 export default Root;

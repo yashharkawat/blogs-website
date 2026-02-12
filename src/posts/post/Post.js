@@ -11,19 +11,29 @@ import { actions } from "../../store/index";
 import { setRevisionHistory } from "../../actions/setRevisionHistory";
 
 export const getDateString = (date) => {
-  
   if (date === undefined || date === null) return "";
-  //console.log(date);
-  //date=valueOf(date);
   try {
-    date = date.toDate();
-    date = date.toLocaleString().split(",")[0];
-  } catch (err) {}
-  try {
-    const [day,month,year]=date.split('/');
-    date = `${year}-${month}-${day}`;
-  } catch (err) {}
-  return date;
+    // Handle Firestore Timestamp objects
+    if (date.toDate) {
+      date = date.toDate();
+    }
+    // Handle numeric timestamps
+    if (typeof date === "number") {
+      date = new Date(date);
+    }
+    // Handle string dates
+    if (typeof date === "string") {
+      date = new Date(date);
+    }
+    // Format as readable date string
+    if (date instanceof Date && !isNaN(date)) {
+      const options = { year: "numeric", month: "short", day: "numeric" };
+      return date.toLocaleDateString("en-US", options);
+    }
+    return "";
+  } catch (err) {
+    return "";
+  }
 };
 const doReset = (time) => {
   const currentTimestamp = Date.now();
@@ -152,15 +162,17 @@ const Post = (props, { deletePost }) => {
   //console.log('created_at',post.created_at);
   return (
     <div className="post" id={post.id}>
-      {post.image !== undefined && (
-        <div onClick={postOnClick}>
-          <img
-            className="post-image margin-bottom pointer"
-            src={post.image}
-            alt="Featured"
-          />
-        </div>
-      )}
+      <div onClick={postOnClick}>
+        <img
+          className="post-image margin-bottom pointer"
+          src={post.image || "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=600&h=400&fit=crop"}
+          alt="Featured"
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=600&h=400&fit=crop";
+          }}
+        />
+      </div>
       <div className="post-description">
         <div className="author-date">
           <Link to={`/authors/${post.author}`} className="author">

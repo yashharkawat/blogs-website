@@ -4,7 +4,7 @@
     margin: 0 auto;
     padding: 20px;
     border: none;
-    border-radius: 5px;
+    border-radius: 12px;
     background-color: #2c2b2b;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   }
@@ -30,5 +30,13 @@
     cursor: pointer;
     text-decoration: none;
     margin-right: 10px;
+  }
+
+  @media screen and (max-width: 768px) {
+    .profile-container {
+      padding: 16px;
+      max-width: 100%;
+      margin: 0;
+    }
   }
   

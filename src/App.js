@@ -25,6 +25,7 @@ import List from './Lists/List'
 import AddPost from "./Lists/AddPost";
 import DraftDesription from "./posts/Drafts/DraftDescription";
 import ListDescription from "./Lists/ListDescription";
+import LandingPage from "./pages/LandingPage";
 
 const router=createBrowserRouter([
 {
@@ -67,7 +68,7 @@ const router=createBrowserRouter([
     },
     {
       path:'add',
-      element:<div className='container'><h1>Create new Post</h1><NewPost initialValues={{}}/></div>
+      element:<NewPost initialValues={{}}/>
     },
     {
       path:'edit/:id',
@@ -107,6 +108,10 @@ const router=createBrowserRouter([
       element:<ListDescription />
     }
   ]
+},
+{
+  path:'welcome',
+  element:<LandingPage />
 },
 {
   path:'signup',

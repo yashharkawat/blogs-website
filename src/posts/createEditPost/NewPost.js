@@ -198,7 +198,7 @@ const NewPost = (props) => {
     const exists = await checkUrlExists(values.image);
     if (!exists) {
       newValues.image =
-        "https://notion-blog-wildcatco.vercel.app/_next/image?url=https%3A%2F%2Fwww.notion.so%2Fimage%2Fhttps%253A%252F%252Fs3-us-west-2.amazonaws.com%252Fsecure.notion-static.com%252F458d78d3-2b75-4ac1-a9b6-8373ef3110a5%252Fmarek-piwnicki-GV2YhjYpQZM-unsplash.jpg%3Ftable%3Dblock%26id%3D3caebeb5-9453-44ed-902a-7458f9bb52c7%26cache%3Dv2&w=1920&q=75";
+        "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=600&h=400&fit=crop";
     }
     
     const newDrafts = [newValues, ...drafts];
@@ -224,29 +224,24 @@ const NewPost = (props) => {
     });
   };
 
-  if (loading) return <div>Loading</div>;
+  if (loading) return <div className="editor-loading">Loading...</div>;
   return (
-    <div className="container">
+    <div className="editor-page">
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={async (values, { resetForm }) => {
           if (!isDraft) {
-            console.log("adding to my post");
             let newValues = { ...formValues };
-            console.log(formValues);
             try {
               const exists = await checkUrlExists(values.image);
-              //console.log(values.image);
               if (!exists) {
                 newValues = {
                   ...formValues,
                   image:
-                    "https://notion-blog-wildcatco.vercel.app/_next/image?url=https%3A%2F%2Fwww.notion.so%2Fimage%2Fhttps%253A%252F%252Fs3-us-west-2.amazonaws.com%252Fsecure.notion-static.com%252F458d78d3-2b75-4ac1-a9b6-8373ef3110a5%252Fmarek-piwnicki-GV2YhjYpQZM-unsplash.jpg%3Ftable%3Dblock%26id%3D3caebeb5-9453-44ed-902a-7458f9bb52c7%26cache%3Dv2&w=1920&q=75",
+                    "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=600&h=400&fit=crop",
                 };
-                //console.log("exists",exists,newValues);
               }
-              //console.log("exists", exists);
             } catch (err) {
               console.log(err);
             }
@@ -259,7 +254,6 @@ const NewPost = (props) => {
               resetForm();
             } else {
               try {
-                //console.log(newValues);
                 updatePost(props.id, newValues);
               } catch (err) {
                 console.log(err);
@@ -279,83 +273,117 @@ const NewPost = (props) => {
           errors,
           touched,
         }) => (
-          <form noValidate onSubmit={handleSubmit} className="newpost-form">
-            <div>
+          <form noValidate onSubmit={handleSubmit} className="editor-form">
+            <div className="editor-header">
+              <Link to="/" className="editor-back-link">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+                Back to posts
+              </Link>
+              <div className="editor-actions">
+                {props.id !== undefined && (
+                  <button
+                    type="button"
+                    className="editor-btn editor-btn-secondary"
+                    onClick={() => addRevisionHistory(values)}
+                  >
+                    Revision History
+                  </button>
+                )}
+                {props.id === undefined && (
+                  <button
+                    type="submit"
+                    className="editor-btn editor-btn-secondary"
+                    onClick={() => setIsDraft(true)}
+                  >
+                    Save as Draft
+                  </button>
+                )}
+                <button type="submit" className="editor-btn editor-btn-primary">
+                  {props.id ? "Update Post" : "Publish"}
+                </button>
+              </div>
+            </div>
+
+            <div className="editor-content">
               <input
                 type="text"
                 name="title"
-                placeholder="Title"
+                placeholder="Your story title..."
                 value={formValues.title}
                 onChange={(e) => handleChangeForm("title", e.target.value)}
                 onBlur={handleBlur}
-                className="newpost-input"
+                className="editor-title-input"
               />
               {touched.title && errors.title && (
-                <div className="newpost-error">{errors.title}</div>
+                <div className="editor-error">{errors.title}</div>
               )}
-            </div>
-            <div>
+
               <input
                 type="text"
                 name="topic"
-                placeholder="Topic"
+                placeholder="Topic (e.g. Technology, Science, Art)"
                 value={formValues.topic}
                 onChange={(e) => handleChangeForm("topic", e.target.value)}
                 onBlur={handleBlur}
-                className="newpost-input"
+                className="editor-topic-input"
               />
+
+              <div className="editor-image-section">
+                <label className="editor-label">Featured Image</label>
+                <input
+                  type="text"
+                  name="image"
+                  placeholder="Paste an image URL here..."
+                  value={formValues.image}
+                  onChange={(e) => handleChangeForm("image", e.target.value)}
+                  onBlur={handleBlur}
+                  className="editor-image-input"
+                />
+                <ErrorMessage
+                  name="image"
+                  component="div"
+                  className="editor-error"
+                />
+                {formValues.image && (
+                  <div className="editor-image-preview">
+                    <img
+                      src={formValues.image}
+                      alt="Preview"
+                      onError={(e) => {
+                        e.target.style.display = "none";
+                      }}
+                      onLoad={(e) => {
+                        e.target.style.display = "block";
+                      }}
+                    />
+                  </div>
+                )}
+              </div>
+
+              <div className="editor-body-section">
+                <label className="editor-label">Content</label>
+                <textarea
+                  name="text"
+                  placeholder="Write your story here... Share your ideas, experiences, and knowledge with the world."
+                  value={formValues.text}
+                  onChange={(e) => handleChangeForm("text", e.target.value)}
+                  onBlur={handleBlur}
+                  className="editor-textarea"
+                  rows={20}
+                />
+                <ErrorMessage
+                  name="text"
+                  component="div"
+                  className="editor-error"
+                />
+              </div>
+
+              <div className="editor-word-count">
+                {formValues.text ? formValues.text.split(/\s+/).filter(Boolean).length : 0} words
+              </div>
             </div>
-            <div>
-              <input
-                type="text"
-                name="image"
-                placeholder="Featured Image URL"
-                value={formValues.image}
-                onChange={(e) => handleChangeForm("image", e.target.value)}
-                onBlur={handleBlur}
-                className="newpost-input"
-              />
-              <ErrorMessage
-                name="image"
-                component="div"
-                className="newpost-error"
-              />
-            </div>
-            <div>
-              <input
-                type="text"
-                name="text"
-                placeholder="Text"
-                value={formValues.text}
-                onChange={(e) => handleChangeForm("text", e.target.value)}
-                onBlur={handleBlur}
-                className="newpost-input"
-              />
-              <ErrorMessage
-                name="text"
-                component="div"
-                className="newpost-error"
-              />
-            </div>
-            {props.id !== undefined && (
-              <button
-                className="newpost-button"
-                onClick={() => addRevisionHistory(values)}
-              >
-                See revision History
-              </button>
-            )}
-            <button type="submit" className="newpost-button">
-              Add Post
-            </button>
-            {props.id === undefined && (
-              <button
-                className="newpost-button"
-                onClick={() => setIsDraft(true)}
-              >
-                Save as draft
-              </button>
-            )}
           </form>
         )}
       </Formik>
@@ -368,9 +396,6 @@ const NewPost = (props) => {
           setPost={setPost}
         />
       )}
-      <Link to="/">
-        <button className="newpost-button">View Posts</button>
-      </Link>
     </div>
   );
 };

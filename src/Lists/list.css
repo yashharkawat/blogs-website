@@ -29,5 +29,17 @@
     padding:10px 20px;
     width:300px;
     border-radius: 10px;
-    
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+@media screen and (max-width: 768px) {
+  .list {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  .list-input {
+    width: 100%;
+  }
 }

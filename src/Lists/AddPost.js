@@ -73,7 +73,7 @@ const AddPost = (props) => {
           const exists=await checkUrlExists(values.image);
           console.log(values.image);
           if(!exists){
-            newValues={...values,image:'https://notion-blog-wildcatco.vercel.app/_next/image?url=https%3A%2F%2Fwww.notion.so%2Fimage%2Fhttps%253A%252F%252Fs3-us-west-2.amazonaws.com%252Fsecure.notion-static.com%252F458d78d3-2b75-4ac1-a9b6-8373ef3110a5%252Fmarek-piwnicki-GV2YhjYpQZM-unsplash.jpg%3Ftable%3Dblock%26id%3D3caebeb5-9453-44ed-902a-7458f9bb52c7%26cache%3Dv2&w=1920&q=75'};
+            newValues={...values,image:'https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=600&h=400&fit=crop'};
           }
           console.log("exists",exists);
         }

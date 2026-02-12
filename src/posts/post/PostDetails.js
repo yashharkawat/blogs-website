@@ -268,8 +268,13 @@ const PostDetails = () => {
           <br />
           <br />
           <img
-            src={post.image}
-            style={{ width: "100%", height: "auto", maxHeight: "400px" }}
+            src={post.image || "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=600&h=400&fit=crop"}
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=600&h=400&fit=crop";
+            }}
+            alt="Featured"
+            style={{ width: "100%", height: "auto", maxHeight: "400px", objectFit: "cover", borderRadius: "8px" }}
           />
           <br />
           <p>{post.text}</p>

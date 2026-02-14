@@ -1,22 +1,23 @@
 /* AuthorDetails.css */
 
 .author-profile {
-    border: 1px solid #ccc;
+    border: 1px solid #333;
     padding: 20px;
     margin: 20px;
-    background-color: #f7f7f7;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
+    background-color: #2c2b2b;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    color: #e6edf3;
   }
   
   .author-profile h2 {
     margin-bottom: 10px;
-    color: #333;
+    color: #f3f3f3;
   }
   
   .author-profile p {
     margin: 5px 0;
-    color: #666;
+    color: #b9b9b9;
   }
   
   .author-profile p:first-child {
@@ -27,5 +28,17 @@
     margin-bottom: 0;
   }
   
-  /* Add more custom styles as needed */
+  @media screen and (max-width: 768px) {
+    .author-profile {
+      margin: 12px;
+      padding: 16px;
+    }
+  }
+  
+  @media screen and (max-width: 480px) {
+    .author-profile {
+      margin: 8px 0;
+      padding: 12px;
+    }
+  }
   

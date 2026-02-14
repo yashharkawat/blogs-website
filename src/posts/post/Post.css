@@ -187,8 +187,18 @@
     gap: 4px;
   }
 
+  .details-container .flex.space-between.align {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
   .topic-time {
     flex-wrap: wrap;
     gap: 6px;
+  }
+
+  .margin-top-neg {
+    margin-top: -20px;
+    margin-bottom: 24px;
   }
 }

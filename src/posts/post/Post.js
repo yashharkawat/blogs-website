@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import "./Post.css";
 import { Link, useNavigate } from "react-router-dom";
 import readingTime from "../readingTime";
@@ -9,6 +9,8 @@ import { db } from "../../config/firebase";
 import { updateDoc, doc } from "firebase/firestore";
 import { actions } from "../../store/index";
 import { setRevisionHistory } from "../../actions/setRevisionHistory";
+import { AuthModalContext } from "../../context/AuthModalContext";
+import { getSafeImageUrl, DEFAULT_POST_IMAGE } from "../../utils/imageFallback";
 
 export const getDateString = (date) => {
   if (date === undefined || date === null) return "";
@@ -60,6 +62,8 @@ const Post = (props, { deletePost }) => {
   const username = useSelector((state) => state.name);
   const currUser = useSelector((state) => state);
   const dispatch = useDispatch();
+  const userId = useSelector((state) => state.id);
+  const { openSignInModal } = useContext(AuthModalContext) || {};
 
   useEffect(() => {
     if (props.post.author === username) setMyPost(true);
@@ -67,10 +71,15 @@ const Post = (props, { deletePost }) => {
   const postOnClick = async () => {
     try {
       const article = doc(db, "articles", post.id);
-      const newPost = { ...post, view: post.view + 1 };
+      const newPost = { ...post, view: (post.view || 0) + 1 };
       await updateDoc(article, newPost);
     } catch (err) {
       console.log(err);
+    }
+    if (!currUser.id) {
+      if (props.navigate !== undefined) navigate(`${props.navigate}`);
+      else navigate(`/post-details/${post.id}`);
+      return;
     }
     try {
       if (doReset(currUser.lastResetTime)) {
@@ -78,7 +87,6 @@ const Post = (props, { deletePost }) => {
         const num = 0;
         dispatch(actions.changeCurrentUserViews(num));
         const newUser = { ...currUser, numOfViewsToday: num };
-
         await updateDoc(user, newUser);
       }
       const user = doc(db, "users", currUser.id);
@@ -105,7 +113,6 @@ const Post = (props, { deletePost }) => {
       console.log(err);
     }
   };
-  const userId = useSelector((state) => state.id);
 
   useEffect(() => {
     if (post.liked_by.includes(userId)) {
@@ -116,7 +123,12 @@ const Post = (props, { deletePost }) => {
   // const userLike=()=>{
   //   post.liked_by.includes()
   // }
-  const likeHandler = async () => {
+  const likeHandler = async (e) => {
+    e?.stopPropagation?.();
+    if (!userId) {
+      openSignInModal?.();
+      return;
+    }
     setLike(true);
     const newLikes = [...post.liked_by, userId];
     const newPost = { ...post, liked_by: newLikes };
@@ -131,12 +143,16 @@ const Post = (props, { deletePost }) => {
       "liked"
     );
   };
-  const unlikeHandler = async () => {
+  const unlikeHandler = async (e) => {
+    e?.stopPropagation?.();
+    if (!userId) {
+      openSignInModal?.();
+      return;
+    }
     setLike(false);
     const newLikes = post.liked_by.filter((user) => user !== userId);
     const newPost = { ...post, liked_by: newLikes };
     setPost(newPost);
-
     const currentPostRef = doc(db, "articles", post.id);
     await updateDoc(currentPostRef, newPost);
     setRevisionHistory(
@@ -165,11 +181,11 @@ const Post = (props, { deletePost }) => {
       <div onClick={postOnClick}>
         <img
           className="post-image margin-bottom pointer"
-          src={post.image || "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=600&h=400&fit=crop"}
+          src={getSafeImageUrl(post.image)}
           alt="Featured"
           onError={(e) => {
             e.target.onerror = null;
-            e.target.src = "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=600&h=400&fit=crop";
+            e.target.src = DEFAULT_POST_IMAGE;
           }}
         />
       </div>
@@ -200,8 +216,8 @@ const Post = (props, { deletePost }) => {
             <div className="flex-item align flex pointer">
               {!like && (
                 <svg
-                  className="flex-item "
-                  onClick={likeHandler}
+                  className="flex-item"
+                  onClick={(e) => { e.stopPropagation(); likeHandler(e); }}
                   color="white"
                   fill="white"
                   height="24"
@@ -216,7 +232,7 @@ const Post = (props, { deletePost }) => {
               {like && (
                 <svg
                   className="flex-item"
-                  onClick={unlikeHandler}
+                  onClick={(e) => { e.stopPropagation(); unlikeHandler(e); }}
                   aria-label="Unlike"
                   color="rgb(255, 48, 64)"
                   fill="rgb(255, 48, 64)"

@@ -1,29 +1,38 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { db } from "../../config/firebase";
 import { updateDoc, doc } from "firebase/firestore";
 import { actions } from "../../store/index";
 import { setRevisionHistory } from "../../actions/setRevisionHistory";
+import { AuthModalContext } from "../../context/AuthModalContext";
+
 const SaveForLater = (props) => {
   const userId = useSelector((state) => state.id);
   const currentUser = useSelector((state) => state);
   const savedPostId = useSelector((state) => state.saved);
+  const { openSignInModal } = useContext(AuthModalContext) || {};
 
   const [save, setSave] = useState(false);
   const dispatch = useDispatch();
-  const revisionHistory=useSelector(state=>state.revisionHistory);
-  const currUser=useSelector(state=>state);
+  const revisionHistory = useSelector((state) => state.revisionHistory);
+  const currUser = useSelector((state) => state);
+
   useEffect(() => {
     try {
-      if (savedPostId.includes(props.postId)) {
+      if (savedPostId && savedPostId.includes(props.postId)) {
         setSave(true);
       }
     } catch (err) {
       console.log(err);
     }
-  }, [props.postId]);
+  }, [props.postId, savedPostId]);
+
   const saveHandler = async (e) => {
-    //console.log(userId);
+    if (!userId) {
+      e?.stopPropagation?.();
+      openSignInModal?.();
+      return;
+    }
     setSave(true);
     const user = doc(db, "users", userId);
     //console.log(user.doc.data());
@@ -48,8 +57,11 @@ const SaveForLater = (props) => {
     //save post here
   };
   const unsaveHandler = async (e) => {
-    //console.log(userId,currentUser);
-    
+    if (!userId) {
+      e?.stopPropagation?.();
+      openSignInModal?.();
+      return;
+    }
     const user = doc(db, "users", userId);
     const newSaved = savedPostId.filter((savedId) => savedId !== props.postId);
     const newUser = { ...currentUser, saved: newSaved };

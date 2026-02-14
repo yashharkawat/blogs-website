@@ -33,7 +33,7 @@ const LandingPage = () => {
             BlogSpace is a place to read, write, and deepen your understanding. 
             Discover stories, thinking, and expertise from writers on any topic.
           </p>
-          <Link to="/signup" className="landing-hero-cta">
+          <Link to="/feed" className="landing-hero-cta">
             Start Reading
           </Link>
         </div>

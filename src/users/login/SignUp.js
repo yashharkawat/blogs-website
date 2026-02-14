@@ -69,7 +69,7 @@ const SignUp = () => {
       dispatch(actions.changeCurrentUser({ ...user, id: newdata.id }));
       await updateDoc(db, "users", newdata.id);
       //console.log(user);
-      navigate("/");
+      navigate("/feed");
     } catch (err) {
       console.log(err);
     }
@@ -79,7 +79,7 @@ const SignUp = () => {
       await createUserWithEmailAndPassword(auth, values.email, values.password);
 
       addUser({ email: values.email, name: values.name });
-      navigate("/");
+      navigate("/feed");
       // console.log(auth?.currentUser);
     } catch (err) {
       //setSignedIn(false);

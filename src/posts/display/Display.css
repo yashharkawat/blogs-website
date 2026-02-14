@@ -50,4 +50,28 @@ body {
 
 .display-container {
   width: 100%;
+  min-width: 0;
+}
+
+@media screen and (max-width: 768px) {
+  .display-container .margin-top {
+    margin-top: 24px;
+  }
+
+  .display-container .flex.center {
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .display-container .flex.center .pages {
+    margin-right: 16px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .display-container .flex.space-between.margin-top {
+    flex-direction: column;
+    align-items: stretch;
+  }
 }

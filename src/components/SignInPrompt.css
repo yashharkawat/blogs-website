@@ -1,0 +1,117 @@
+.signin-prompt-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.signin-prompt-modal {
+  background: #2b2b30;
+  border: 1px solid #444;
+  border-radius: 12px;
+  padding: 28px;
+  max-width: 380px;
+  width: 100%;
+  position: relative;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.signin-prompt-title {
+  margin: 0 0 12px;
+  font-size: 1.5rem;
+  color: #fff;
+}
+
+.signin-prompt-text {
+  margin: 0 0 24px;
+  color: #b9b9b9;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.signin-prompt-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.signin-prompt-btn {
+  display: block;
+  text-align: center;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.signin-prompt-btn-primary {
+  background: #1a8917;
+  color: #fff;
+}
+
+.signin-prompt-btn-primary:hover {
+  background: #156d12;
+}
+
+.signin-prompt-btn-secondary {
+  background: transparent;
+  color: #e6edf3;
+  border: 1px solid #555;
+}
+
+.signin-prompt-btn-secondary:hover {
+  border-color: #888;
+}
+
+.signin-prompt-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: none;
+  border: none;
+  color: #999;
+  font-size: 1.5rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 4px;
+}
+
+.signin-prompt-close:hover {
+  color: #fff;
+}
+
+/* Full page version for protected routes */
+.signin-prompt-page {
+  max-width: 420px;
+  margin: 60px auto;
+  padding: 40px 24px;
+  text-align: center;
+}
+
+.signin-prompt-page-title {
+  font-size: 1.75rem;
+  margin-bottom: 12px;
+  color: #fff;
+}
+
+.signin-prompt-page-text {
+  color: #b9b9b9;
+  margin-bottom: 28px;
+}
+
+.signin-prompt-page-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.signin-prompt-page-actions .signin-prompt-btn {
+  min-width: 200px;
+}

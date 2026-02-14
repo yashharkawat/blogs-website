@@ -1,9 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import SimilarAuthor from "../recommendations/SimilarAuthor";
 import RecommendedPosts from "../recommendations/RecommendedPosts";
-import NavBar from "../navbar/NavBar";
 import SaveForLater from "../saved/SaveForLater";
 import Comment from "../Comment/Comment";
 import { getDateString } from "./Post";
@@ -13,6 +12,8 @@ import { updateDoc, doc } from "firebase/firestore";
 import { useDispatch, useSelector } from "react-redux";
 import { actions } from "../../store";
 import readingTime from "../readingTime";
+import { AuthModalContext } from "../../context/AuthModalContext";
+import { getSafeImageUrl, DEFAULT_POST_IMAGE } from "../../utils/imageFallback";
 
 const PostDetails = () => {
   const params = useParams();
@@ -29,6 +30,7 @@ const PostDetails = () => {
   const followingName = useSelector((state) => state.followers);
   const currUser = useSelector((state) => state);
   const dispatch = useDispatch();
+  const { openSignInModal } = useContext(AuthModalContext) || {};
 
   useEffect(() => {
     if (followingName !== undefined) {
@@ -59,10 +61,13 @@ const PostDetails = () => {
         return { ...item, comments: [] };
       } else return item;
     });
-    setPost(newData[0]);
-    //console.log(newData[0]);
-    setLoading(false);
     const postDetails = newData[0];
+    if (!postDetails) {
+      setLoading(false);
+      return;
+    }
+    setPost(postDetails);
+    setLoading(false);
     setReadTime(readingTime(postDetails.text));
     if (postDetails.liked_by.includes(userId)) {
       setLike(true);
@@ -79,16 +84,22 @@ const PostDetails = () => {
   }, [params.id]);
 
   const likeHandler = async () => {
+    if (!userId) {
+      openSignInModal?.();
+      return;
+    }
     setLike(true);
     const newLikes = [...post.liked_by, userId];
     const newPost = { ...post, liked_by: newLikes };
     setPost(newPost);
-    //setPost(newPost);
-    console.log(newPost);
     const currentPostRef = doc(db, "articles", post.id);
     await updateDoc(currentPostRef, newPost);
   };
   const unlikeHandler = async () => {
+    if (!userId) {
+      openSignInModal?.();
+      return;
+    }
     setLike(false);
     const newLikes = post.liked_by.filter((user) => user !== userId);
     const newPost = { ...post, liked_by: newLikes };
@@ -97,6 +108,10 @@ const PostDetails = () => {
     await updateDoc(currentPostRef, newPost);
   };
   const follow = async () => {
+    if (!userId) {
+      openSignInModal?.();
+      return;
+    }
     setFollowing(true);
     try {
       let newFollows = [];
@@ -115,6 +130,10 @@ const PostDetails = () => {
     }
   };
   const unfollow = async () => {
+    if (!userId) {
+      openSignInModal?.();
+      return;
+    }
     setFollowing(false);
     try {
       const newFollows = currUser.followers.filter((item) => {
@@ -142,6 +161,7 @@ const PostDetails = () => {
   };
 
   if (loading) return <div>Loading</div>;
+  if (!post) return <div className="details-container">Post not found.</div>;
   return (
     <>
       <div className="details-container">
@@ -207,7 +227,10 @@ const PostDetails = () => {
               )}
               <span className="flex-item">{post.liked_by.length}</span>
               <svg
-                onClick={() => setComment(!comment)}
+                onClick={() => {
+                  if (!userId) openSignInModal?.();
+                  else setComment(!comment);
+                }}
                 className="flex-item"
                 color="rgb(120, 120, 120)"
                 fill="rgb(0, 0, 0)"
@@ -268,10 +291,10 @@ const PostDetails = () => {
           <br />
           <br />
           <img
-            src={post.image || "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=600&h=400&fit=crop"}
+            src={getSafeImageUrl(post.image)}
             onError={(e) => {
               e.target.onerror = null;
-              e.target.src = "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=600&h=400&fit=crop";
+              e.target.src = DEFAULT_POST_IMAGE;
             }}
             alt="Featured"
             style={{ width: "100%", height: "auto", maxHeight: "400px", objectFit: "cover", borderRadius: "8px" }}

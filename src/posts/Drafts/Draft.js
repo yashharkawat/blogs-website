@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import readingTime from "../readingTime";
 import SaveForLater from "../saved/SaveForLater";
 import deleteImage from "../../images/delete.png";
+import { getSafeImageUrl } from "../../utils/imageFallback";
 
 const Draft = (props) => {
   const navigate=useNavigate();
@@ -17,7 +18,7 @@ const Draft = (props) => {
         <div onClick={postOnClick}>
           <img
             className="post-image margin-bottom pointer"
-            src={post.image}
+            src={getSafeImageUrl(post.image)}
             alt="Featured"
           />
         </div>

@@ -33,22 +33,37 @@ const Login = () => {
     //console.log(currentUser);
     dispatch(actions.changeCurrentUser(currentUser));
   };
-  const signInWithEmail = async (values) => {
-    try {
-      const user = await signInWithEmailAndPassword(
-        auth,
-        values.email,
-        values.password
-      );
-      //console.log(user);
-      const confirmUser = user.user;
+  const getAuthErrorMessage = (err) => {
+    if (!err?.code) return "Incorrect email or password";
+    switch (err.code) {
+      case "auth/user-not-found":
+        return "No account found with this email. Please sign up first.";
+      case "auth/wrong-password":
+      case "auth/invalid-credential":
+        return "Incorrect email or password.";
+      case "auth/invalid-email":
+        return "Please enter a valid email address.";
+      case "auth/too-many-requests":
+        return "Too many attempts. Please try again later.";
+      default:
+        return err.message || "Incorrect email or password.";
+    }
+  };
 
-      getUser(values.email);
-      navigate("/");
-      console.log(selector);
+  const signInWithEmail = async (values) => {
+    setError("");
+    const email = (values.email || "").trim().toLowerCase();
+    const password = (values.password || "").trim();
+    if (!email || !password) {
+      setError("Please enter both email and password.");
+      return;
+    }
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      await getUser(email);
+      navigate("/feed");
     } catch (err) {
-      console.log('err');
-      setError(err);
+      setError(getAuthErrorMessage(err));
     }
   };
   const signInWithGoogle = async () => {
@@ -58,7 +73,7 @@ const Login = () => {
       dispatch(actions.changeCurrentUserName(result.user.displayName));
 
       getUser(email);
-      navigate('/');
+      navigate("/feed");
       //console.log(auth?.currentUser);
     } catch (err) {
       setError(err);
@@ -86,7 +101,7 @@ const Login = () => {
           <form noValidate onSubmit={handleSubmit} className="login-form">
             <div>
               <input
-                type="text"
+                type="email"
                 name="email"
                 value={values.email}
                 onChange={handleChange}
@@ -122,9 +137,14 @@ const Login = () => {
           </form>
         )}
       </Formik>
+      <div className="login-text" style={{ marginTop: 8 }}>
+        <Link to="/forgot-password" className="signin-link">
+          Forgot password?
+        </Link>
+      </div>
       {error && (
         <div className="login-text login-error">
-          Incorrect email or password
+          {typeof error === "string" ? error : "Incorrect email or password."}
         </div>
       )}
 

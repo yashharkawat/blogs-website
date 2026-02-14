@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import readingTime from "../posts/readingTime";
+import { getSafeImageUrl } from "../utils/imageFallback";
 
 const ListDescription = () => {
   const params = useParams();
@@ -47,8 +48,9 @@ const ListDescription = () => {
         <br />
         <br />
         <img
-          src={post.image}
+          src={getSafeImageUrl(post.image)}
           style={{ width: "100%", height: "auto", maxHeight: "400px" }}
+          alt="Featured"
         />
         <br />
         <p>{post.text}</p>
